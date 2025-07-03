@@ -21,7 +21,9 @@ export default function App() {
     setLoading(true);
 
     try {
-      const res = await fetch(`https://www.omdbapi.com/?apikey=9367f377&s=${query}`);
+      const res = await fetch(
+        `https://www.omdbapi.com/?apikey=9367f377&s=${query}`
+      );
       const data = await res.json();
 
       if (data.Response === 'False') {
@@ -48,24 +50,36 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-6 py-10 relative font-sans">
-      {/* Header */}
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-400 to-yellow-400 drop-shadow-md">
+      {/* ---------- Title (always centered) ---------- */}
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-6 sm:mb-10 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-400 to-yellow-400 drop-shadow-md">
         🎬 Movie Search Portal
       </h1>
 
-      {/* Floating Favorites Button with Count */}
-      <div className="absolute top-6 right-6">
+      {/* ---------- MOBILE‑ONLY Favorites button (centered below title) ---------- */}
+      <div className="flex justify-center mb-8 sm:hidden">
         <Link to="/fevorite">
-          <button className="relative flex items-center gap-2 px-4 py-2 rounded-full border border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white transition font-semibold shadow-lg hover:shadow-pink-500/50">
+          <button className="relative flex items-center gap-2 px-4 py-2 rounded-full border border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white transition font-semibold shadow-lg">
             ❤️ Favorites
-            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full shadow-md">
+            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md">
               {favorites.length}
             </span>
           </button>
         </Link>
       </div>
 
-      {/* Search Box */}
+      {/* ---------- DESKTOP/TABLET Favorites button (top‑right) ---------- */}
+      <div className="absolute top-6 right-6 hidden sm:block">
+        <Link to="/fevorite">
+          <button className="relative flex items-center gap-2 px-4 py-2 rounded-full border border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white transition font-semibold shadow-lg hover:shadow-pink-500/50">
+            ❤️ Favorites
+            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md">
+              {favorites.length}
+            </span>
+          </button>
+        </Link>
+      </div>
+
+      {/* ---------- Search Box ---------- */}
       <form
         onSubmit={handleSearch}
         className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12"
@@ -85,24 +99,21 @@ export default function App() {
         </button>
       </form>
 
-      {/* Loading or Error Messages */}
-      {loading && <p className="text-center text-yellow-400 text-lg mb-4">Searching...</p>}
+      {/* ---------- Messages ---------- */}
+      {loading && (
+        <p className="text-center text-yellow-400 text-lg mb-4">Searching...</p>
+      )}
       {err && <p className="text-center text-red-500 mb-4">{err}</p>}
 
-      {/* Movie Cards Grid */}
+      {/* ---------- Movie Cards Grid ---------- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
         {movie.map((m) => (
           <div
             key={m.imdbID}
-            className="flex flex-col items-center bg-white/10 backdrop-blur-lg border border-white/10 rounded-3xl p-5 
-              shadow-[0_4px_20px_rgba(255,0,150,0.2),_0_0_30px_rgba(99,102,241,0.15)] 
-              transition-all duration-300 hover:scale-[1.03] 
-              hover:shadow-[0_8px_40px_rgba(255,0,150,0.35),_0_0_50px_rgba(99,102,241,0.25)] 
-              min-h-[420px]"
+            className="flex flex-col items-center bg-white/10 backdrop-blur-lg border border-white/10 rounded-3xl p-5 shadow-[0_4px_20px_rgba(255,0,150,0.2),_0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_40px_rgba(255,0,150,0.35),_0_0_50px_rgba(99,102,241,0.25)] min-h-[420px]"
           >
-
-            <img 
-              src={ m.Poster} 
+            <img
+              src={m.Poster}
               alt={m.Title}
               className="w-40 h-60 object-cover mb-4 rounded-xl shadow-md"
             />
